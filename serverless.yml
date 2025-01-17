@@ -1,0 +1,247 @@
+service: relatedarticle-service
+
+provider:
+  name: aws
+  profile: vnt-mac
+  runtime: nodejs18.x
+  region: ap-northeast-1
+  stage: ${opt:stage, 'dev'}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - logs:CreateLogStream
+        - logs:PutLogEvents
+        - dynamodb:*
+      Resource: "*"
+custom:
+  environmentVariables:
+    DYNAMODB_TABLE: Relatedarticle-${self:provider.stage}
+    redisHostdev: redis-11314.c54.ap-northeast-1-2.ec2.redns.redis-cloud.com
+    redisPortdev: 11314
+    redisPassworddev: lP8O8dC8ZaOsKFUED35qAs9eOXcj7Cvw
+    redisHostprod: redis-xyz.ap-northeast-1-2.ec2.redns.redis-cloud.com
+    redisPortprod: 12345
+    redisPasswordprod: ProdRedisPassword
+    slackWebhookUrldev: https://hooks.slack.com/services/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
+    slackWebhookUrlprod: https://hooks.slack.com/services/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
+
+  redisHost: ${self:custom.environmentVariables.redisHost${self:provider.stage}}
+  redisPort: ${self:custom.environmentVariables.redisPort${self:provider.stage}}
+  redisPassword: ${self:custom.environmentVariables.redisPassword${self:provider.stage}}
+  slackWebhookUrl: ${self:custom.environmentVariables.slackWebhookUrl${self:provider.stage}}
+functions:
+  addRelatedarticle:
+    handler: handler.addRelatedarticle
+    memorySize: 128
+    timeout: 10
+    environment:
+      DYNAMODB_TABLE: ${self:custom.environmentVariables.DYNAMODB_TABLE}
+      REDIS_HOST: ${self:custom.redisHost}
+      REDIS_PORT: ${self:custom.redisPort}
+      REDIS_PASSWORD: ${self:custom.redisPassword}
+    events:
+      - http:
+          path: relatedarticles
+          method: post
+          cors:
+            origins:
+              - "*" # Cho phép từ localhost khi phát triển
+            headers:
+              - Content-Type
+              - Authorization
+              - X-Amz-Date
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+            allowCredentials: true
+          # private: true # Yêu cầu API Key
+  updateRelatedarticle:
+    handler: handler.updateRelatedarticle
+    memorySize: 128
+    timeout: 10
+    environment:
+      DYNAMODB_TABLE: ${self:custom.environmentVariables.DYNAMODB_TABLE}
+      REDIS_HOST: ${self:custom.redisHost}
+      REDIS_PORT: ${self:custom.redisPort}
+      REDIS_PASSWORD: ${self:custom.redisPassword}
+    events:
+      - http:
+          path: relatedarticles/{id}
+          method: put
+          cors:
+            origins:
+              - "*" # Cho phép từ localhost khi phát triển
+            headers:
+              - Content-Type
+              - Authorization
+              - X-Amz-Date
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+            allowCredentials: true
+          # private: true # Yêu cầu API Key
+  getAllRelatedarticles:
+    handler: handler.getAllRelatedarticles
+    memorySize: 128
+    timeout: 10
+    environment:
+      DYNAMODB_TABLE: ${self:custom.environmentVariables.DYNAMODB_TABLE}
+      REDIS_HOST: ${self:custom.redisHost}
+      REDIS_PORT: ${self:custom.redisPort}
+      REDIS_PASSWORD: ${self:custom.redisPassword}
+    events:
+      - http:
+          path: relatedarticles
+          method: get
+          cors:
+            origins:
+              - "*" # Cho phép từ localhost khi phát triển
+            headers:
+              - Content-Type
+              - Authorization
+              - X-Amz-Date
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+            allowCredentials: true
+          # private: true # Yêu cầu API Key
+  getRelatedarticleById:
+    handler: handler.getRelatedarticleById
+    memorySize: 128
+    timeout: 10
+    environment:
+      DYNAMODB_TABLE: ${self:custom.environmentVariables.DYNAMODB_TABLE}
+      REDIS_HOST: ${self:custom.redisHost}
+      REDIS_PORT: ${self:custom.redisPort}
+      REDIS_PASSWORD: ${self:custom.redisPassword}
+    events:
+      - http:
+          path: relatedarticles/{id}
+          method: get
+          cors:
+            origins:
+              - "*" # Cho phép từ localhost khi phát triển
+            headers:
+              - Content-Type
+              - Authorization
+              - X-Amz-Date
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+            allowCredentials: true
+          # private: true # Yêu cầu API Key
+  deleteRelatedarticle:
+    handler: handler.deleteRelatedarticle
+    memorySize: 128
+    timeout: 10
+    environment:
+      DYNAMODB_TABLE: ${self:custom.environmentVariables.DYNAMODB_TABLE}
+      REDIS_HOST: ${self:custom.redisHost}
+      REDIS_PORT: ${self:custom.redisPort}
+      REDIS_PASSWORD: ${self:custom.redisPassword}
+    events:
+      - http:
+          path: relatedarticles/{id}
+          method: delete
+          cors:
+            origins:
+              - "*" # Cho phép từ localhost khi phát triển
+            headers:
+              - Content-Type
+              - Authorization
+              - X-Amz-Date
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+            allowCredentials: true
+          # private: true # Yêu cầu API Key
+
+  # Lambda handle error notify lên Slack
+  notifySlackOnError:
+    handler: handler.notifySlackOnError
+    memorySize: 128
+    timeout: 10
+    environment:
+      SLACK_WEBHOOK_URL: ${self:custom.slackWebhookUrl}
+    events:
+      - cloudwatchLog:
+          logGroup: "/aws/lambda/relatedarticle-service-${self:provider.stage}-addRelatedarticle"
+          filter: "ERROR"
+      - cloudwatchLog:
+          logGroup: "/aws/lambda/relatedarticle-service-${self:provider.stage}-updateRelatedarticle"
+          filter: "ERROR"
+      - cloudwatchLog:
+          logGroup: "/aws/lambda/relatedarticle-service-${self:provider.stage}-getAllRelatedarticles"
+          filter: "ERROR"
+      - cloudwatchLog:
+          logGroup: "/aws/lambda/relatedarticle-service-${self:provider.stage}-getRelatedarticleById"
+          filter: "ERROR"
+      - cloudwatchLog:
+          logGroup: "/aws/lambda/relatedarticle-service-${self:provider.stage}-deleteRelatedarticle"
+          filter: "ERROR"
+
+# Định nghĩa log groups và retention
+resources:
+  Resources:
+    RelatedarticleTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.environmentVariables.DYNAMODB_TABLE}
+        AttributeDefinitions:
+          - AttributeName: defaultSearch
+            AttributeType: S
+          - AttributeName: createdDate
+            AttributeType: S
+          - AttributeName: relatedarticleId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: defaultSearch
+            KeyType: HASH
+          - AttributeName: createdDate
+            KeyType: RANGE
+        GlobalSecondaryIndexes:
+          - IndexName: relatedarticleId-index
+            KeySchema:
+              - AttributeName: relatedarticleId
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+
+        BillingMode: PAY_PER_REQUEST
+
+    # # Tạo Usage Plan để liên kết với API Key
+    # ApiUsagePlan:
+    #   Type: AWS::ApiGateway::UsagePlan
+    #   Properties:
+    #     UsagePlanName: RelatedarticleServiceUsagePlan-${self:provider.stage}
+    #     ApiStages:
+    #       - ApiId:
+    #           Ref: ApiGatewayRestApi # Tên tài nguyên của API Gateway
+    #         Stage: ${self:provider.stage}
+    #     Throttle:
+    #       BurstLimit: 500
+    #       RateLimit: 1000
+    #     Quota:
+    #       Limit: 10000
+    #       Period: MONTH
+
+    # # Liên kết API Key với Usage Plan
+    # ApiUsagePlanKey:
+    #   Type: AWS::ApiGateway::UsagePlanKey
+    #   Properties:
+    #     KeyId:
+    #       Ref: ApiGatewayApiKey # Tạo API Key tự động
+    #     KeyType: API_KEY
+    #     UsagePlanId:
+    #       Ref: ApiUsagePlan
+
+    # # Tạo API Key tự động
+    # ApiGatewayApiKey:
+    #   Type: AWS::ApiGateway::ApiKey
+    #   Properties:
+    #     Enabled: true
+    #     Name: relatedarticleServiceApiKey-${self:provider.stage}
+    #     StageKeys:
+    #       - RestApiId:
+    #           Ref: ApiGatewayRestApi
+    #         StageName: ${self:provider.stage}

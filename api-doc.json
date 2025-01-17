@@ -1,0 +1,165 @@
+{
+  "info": {
+    "_postman_id": "30c99357-1e03-4c5a-bb3d-a4c88d8ea5d0",
+    "name": "Relatedarticle API Documentation",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "ApiUrl",
+      "value": "https://your-api-url.com"
+    }
+  ],
+  "item": [
+    {
+      "name": "Add Relatedarticle Entry",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"relatedarticleApp\": \"hlvw37up\",\n  \"relatedarticleTitle\": \"hoocfmve\",\n  \"relatedarticlePosition\": \"044ufz4r\",\n  \"relatedarticleShowThumbnail\": \"c15p6w9a\",\n  \"relatedarticleLinkHoverColor\": \"2052bkd3\",\n  \"relatedarticleTextColor\": \"2s9ptngc\",\n  \"relatedarticleBackgroudColor\": \"8vsav8dt\",\n  \"relatedarticleStatus\": \"d79bsd9d\",\n  \"relatedarticleContent\": [\n    {\n      \"\": \"urskm2rf\",\n      \"ArticleID\": \"p99uxlv4\",\n      \"ArticleTitle\": \"r8phsuci\"\n    }\n  ]\n}"
+        },
+        "url": {
+          "raw": "{{ApiUrl}}/{{TableLower}}s",
+          "host": ["{{ApiUrl}}"],
+          "path": ["relatedarticles"]
+        }
+      },
+      "response": [
+        {
+          "name": "Success Response",
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"message\": \"Relatedarticle created successfully\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Update Relatedarticle Entry",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"relatedarticleApp\": \"5h5xulu6\",\n  \"relatedarticleTitle\": \"1w6eg208\",\n  \"relatedarticlePosition\": \"8ko5t80f\",\n  \"relatedarticleShowThumbnail\": \"x5j1dvof\",\n  \"relatedarticleLinkHoverColor\": \"wq8rirxi\",\n  \"relatedarticleTextColor\": \"cr0w8mvn\",\n  \"relatedarticleBackgroudColor\": \"vj463feo\",\n  \"relatedarticleStatus\": \"rph4ql3u\",\n  \"relatedarticleContent\": [\n    {\n      \"\": \"nj9pey0u\",\n      \"ArticleID\": \"rraj4f26\",\n      \"ArticleTitle\": \"0ee8ojip\"\n    }\n  ]\n}"
+        },
+        "url": {
+          "raw": "{{ApiUrl}}/{{TableLower}}s/{id}",
+          "host": ["{{ApiUrl}}"],
+          "path": ["relatedarticles", "{id}"],
+          "variable": [
+            {
+              "key": "id",
+              "value": "123"
+            }
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Success Response",
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"message\": \"Relatedarticle updated successfully\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get Relatedarticle By ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{ApiUrl}}/{{TableLower}}s/{id}",
+          "host": ["{{ApiUrl}}"],
+          "path": ["relatedarticles", "{id}"],
+          "variable": [
+            {
+              "key": "id",
+              "value": "123"
+            }
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Success Response",
+          "status": "OK",
+          "code": 200,
+          "body": "{\n  \"relatedarticleApp\": \"8ptmf269\",\n  \"relatedarticleTitle\": \"juxpgln7\",\n  \"relatedarticlePosition\": \"sz0chum1\",\n  \"relatedarticleShowThumbnail\": \"j65zlep6\",\n  \"relatedarticleLinkHoverColor\": \"1dpabac9\",\n  \"relatedarticleTextColor\": \"rvyhkirp\",\n  \"relatedarticleBackgroudColor\": \"4eynx98n\",\n  \"relatedarticleStatus\": \"fheai7xj\",\n  \"relatedarticleContent\": [\n    {\n      \"\": \"er2mbmml\",\n      \"ArticleID\": \"64tz4twt\",\n      \"ArticleTitle\": \"st9x7jwi\"\n    }\n  ]\n}"
+        },
+        {
+          "name": "Not Found Response",
+          "status": "Not Found",
+          "code": 404,
+          "body": "{\n    \"message\": \"Relatedarticle with given ID not found\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Delete Relatedarticle Entry",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{ApiUrl}}/{{TableLower}}s/{id}",
+          "host": ["{{ApiUrl}}"],
+          "path": ["relatedarticles", "{id}"],
+          "variable": [
+            {
+              "key": "id",
+              "value": "123"
+            }
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Success Response",
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"message\": \"Relatedarticle deleted successfully\"\n}"
+        },
+        {
+          "name": "Not Found Response",
+          "status": "Not Found",
+          "code": 404,
+          "body": "{\n    \"message\": \"Relatedarticle with given ID not found\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get All TableTests",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{ApiUrl}}/{{TableLower}}s",
+          "host": ["{{ApiUrl}}"],
+          "path": ["relatedarticles"]
+        }
+      },
+      "response": [
+        {
+          "name": "Success Response",
+          "status": "OK",
+          "code": 200,
+          "body": "[\n  {\n    \"relatedarticleApp\": \"y9vobqye\",\n    \"relatedarticleTitle\": \"bvcwue2z\",\n    \"relatedarticlePosition\": \"pz6jt1ak\",\n    \"relatedarticleShowThumbnail\": \"una2jbu8\",\n    \"relatedarticleLinkHoverColor\": \"zjy298q4\",\n    \"relatedarticleTextColor\": \"kodj0mrj\",\n    \"relatedarticleBackgroudColor\": \"xddoe5jt\",\n    \"relatedarticleStatus\": \"ugul0yfa\",\n    \"relatedarticleContent\": [\n      {\n        \"\": \"b6k5s2lv\",\n        \"ArticleID\": \"epj5npwd\",\n        \"ArticleTitle\": \"r0166vht\"\n      }\n    ]\n  },\n  {\n    \"relatedarticleApp\": \"ipgxsnoq\",\n    \"relatedarticleTitle\": \"jlqy2b42\",\n    \"relatedarticlePosition\": \"96js8h88\",\n    \"relatedarticleShowThumbnail\": \"67i2a10z\",\n    \"relatedarticleLinkHoverColor\": \"dja6ooje\",\n    \"relatedarticleTextColor\": \"itme9973\",\n    \"relatedarticleBackgroudColor\": \"vbgy3oin\",\n    \"relatedarticleStatus\": \"012etx0l\",\n    \"relatedarticleContent\": [\n      {\n        \"\": \"y7iwxoa7\",\n        \"ArticleID\": \"4s5auiww\",\n        \"ArticleTitle\": \"7afvw3ol\"\n      }\n    ]\n  }\n]"
+        }
+      ]
+    }
+  ]
+}
