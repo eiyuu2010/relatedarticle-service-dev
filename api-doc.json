@@ -7,7 +7,7 @@
   "variable": [
     {
       "key": "ApiUrl",
-      "value": "https://your-api-url.com"
+      "value": "https://ifntmzf49k.execute-api.ap-northeast-1.amazonaws.com/dev"
     }
   ],
   "item": [
